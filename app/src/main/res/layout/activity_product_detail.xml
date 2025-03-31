@@ -8,53 +8,46 @@
     tools:context=".ProductDetail">
 
     <!-- Toolbar -->
-    <RelativeLayout
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@color/white"
-        android:elevation="4dp"
+        android:layout_height="wrap_content"
+        android:background="@color/material_dynamic_primary60"
+        android:minHeight="?attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageButton
-            android:id="@+id/btn_back"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Back"
-            android:src="@android:drawable/ic_menu_close_clear_cancel" />
-
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="Product Details"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:orientation="vertical"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp">
 
-        <!-- Cart Button with Badge -->
-<!--        <FrameLayout-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_alignParentEnd="true"-->
-<!--            android:layout_centerVertical="true"-->
-<!--            android:layout_marginEnd="8dp">-->
+            <ImageButton
+                android:id="@+id/btn_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Back"
+                android:padding="8dp"
+                android:src="@drawable/ic_back" />
 
-<!--&lt;!&ndash;            <ImageButton&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/btn_view_cart"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="48dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="48dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:background="?attr/selectableItemBackgroundBorderless"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:contentDescription="View Cart"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:src="@drawable/ic_cart" />&ndash;&gt;-->
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="110dp"
+                android:layout_marginTop="-24dp"
+                android:text="Product Detail"
+                android:textColor="@android:color/white"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
+        </LinearLayout>
 
-
-<!--        </FrameLayout>-->
-    </RelativeLayout>
+    </androidx.appcompat.widget.Toolbar>
 
     <!-- Scrollable Content -->
     <ScrollView
@@ -192,18 +185,6 @@
         </LinearLayout>
     </ScrollView>
 
-    <TextView
-        android:id="@+id/cart_badge"
-        android:layout_width="27dp"
-        android:layout_height="29dp"
-        android:layout_gravity="top|end"
-        android:background="@drawable/badge_background"
-        android:gravity="center"
-        android:text="0"
-        android:textColor="@android:color/white"
-        android:textSize="12sp"
-        android:visibility="gone"
-        tools:visibility="visible" />
     <include
         android:id="@+id/bottomNavInclude"
         layout="@layout/bottom_navigation"
