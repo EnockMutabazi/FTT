@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +24,7 @@ public class FarmListActivity extends AppCompatActivity {
     private ActivityFarmListBinding binding;
     private FirebaseAnalytics mFirebaseAnalytics;
     private List<MapViewActivity.Farm> farms = new ArrayList<>();
+    private SearchView search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,42 @@ public class FarmListActivity extends AppCompatActivity {
         // Use view binding
         binding = ActivityFarmListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        search= binding.searchView;
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                boolean hasVisibleFarms = false;
+
+                for (int i = 0; i < binding.farmListContainer.getChildCount(); i++) {
+                    View farmItemView = binding.farmListContainer.getChildAt(i);
+                    TextView farmNameTextView = farmItemView.findViewById(R.id.tv_farm_name);
+                    String farmName = farmNameTextView.getText().toString();
+
+                    if (farmName.toLowerCase().contains(newText.toLowerCase())) {
+                        farmItemView.setVisibility(View.VISIBLE);
+                        hasVisibleFarms = true;
+                    } else {
+                        farmItemView.setVisibility(View.GONE);
+                    }
+                }
+
+                // Show/hide no results message
+                if (hasVisibleFarms || newText.isEmpty()) {
+                    binding.tvNoResults.setVisibility(View.GONE);
+                    binding.scrollView2.setVisibility(View.VISIBLE);
+                } else {
+                    binding.tvNoResults.setVisibility(View.VISIBLE);
+                    binding.scrollView2.setVisibility(View.GONE);
+                }
+
+                return true;
+            }
+        });
 
         // Initialize Firebase Analytics
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);

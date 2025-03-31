@@ -8,13 +8,25 @@
     tools:context=".Cart">
 
     <!-- Toolbar -->
-    <RelativeLayout
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@color/white"
-        android:elevation="4dp"
+        android:layout_height="wrap_content"
+        android:background="@color/material_dynamic_primary60"
+        android:minHeight="?attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Shopping Cart"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
 
         <ImageButton
             android:id="@+id/btn_back"
@@ -26,15 +38,8 @@
             android:contentDescription="Back"
             android:src="@android:drawable/ic_menu_close_clear_cancel" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="Shopping Cart"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-    </RelativeLayout>
+
+    </androidx.appcompat.widget.Toolbar>
 
     <!-- Empty Cart View -->
     <LinearLayout

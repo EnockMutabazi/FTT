@@ -70,12 +70,12 @@ public class ProductDetail extends AppCompatActivity {
         int cartCount = CartManager.getInstance().getItemCount();
 
         // If you have a cart badge view in the layout, update it here
-        if (binding.cartBadge != null) {
+        if (binding.bottomNavInclude.bottomCartBadge != null) {
             if (cartCount > 0) {
-                binding.cartBadge.setVisibility(View.VISIBLE);
-                binding.cartBadge.setText(String.valueOf(cartCount));
+                binding.bottomNavInclude.bottomCartBadge.setVisibility(View.VISIBLE);
+                binding.bottomNavInclude.bottomCartBadge.setText(String.valueOf(cartCount));
             } else {
-                binding.cartBadge.setVisibility(View.GONE);
+                binding.bottomNavInclude.bottomCartBadge.setVisibility(View.GONE);
             }
         }
         TextView bottomCartBadge = binding.bottomNavInclude.bottomCartBadge;
