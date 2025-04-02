@@ -119,9 +119,9 @@ public class FarmDetailActivity extends AppCompatActivity implements OnMapReadyC
                 // Track event
                 trackButtonClick("call_farm_button");
 
-                // In a real app, you would dial the farm's phone number
-                // Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:5551234567"));
-                // startActivity(callIntent);
+                // phone number
+                 Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:2363384211"));
+                startActivity(callIntent);
             }
         });
 
@@ -132,10 +132,11 @@ public class FarmDetailActivity extends AppCompatActivity implements OnMapReadyC
                 // Track event
                 trackButtonClick("get_directions_button");
 
-                // Open Google Maps directions
-                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + farmLat + "," + farmLng);
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                // Use driving mode and current location
+                String uri = String.format("google.navigation:q=%f,%f&mode=d", farmLat, farmLng);
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
                 mapIntent.setPackage("com.google.android.apps.maps");
+
                 if (mapIntent.resolveActivity(getPackageManager()) != null) {
                     startActivity(mapIntent);
                 }
@@ -214,4 +215,5 @@ public class FarmDetailActivity extends AppCompatActivity implements OnMapReadyC
         bundle.putString("farm_name", farmName);
         mFirebaseAnalytics.logEvent("farm_detail_button_click", bundle);
     }
+
 }
