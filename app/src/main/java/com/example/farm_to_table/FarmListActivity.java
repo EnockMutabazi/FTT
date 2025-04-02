@@ -113,7 +113,7 @@ public class FarmListActivity extends AppCompatActivity {
 
     private void setupFarmData() {
         // Same farm data as in MapViewActivity
-        farms.add(new MapViewActivity.Farm("Paynter's Fruit Market", new LatLng(49.8342, -119.6501),
+        farms.add(new MapViewActivity.Farm("Paynter's Fruit Market", new LatLng(49.8315, -119.6250),
                 "cherries and apples",R.drawable.cherries));
         farms.add(new MapViewActivity.Farm("Arlo's Honey Farm", new LatLng(49.8887, -119.4962),
                 "Local honey producer with bee tours and natural products",R.drawable.honey));
