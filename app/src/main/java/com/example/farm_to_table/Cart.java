@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.farm_to_table.databinding.ActivityCartBinding;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
-public class Cart extends AppCompatActivity implements CartAdapter.CartItemListener {
+public class Cart extends AppCompatActivity implements CartAdapter.CartItemListener, CartManager.CartUpdateListener {
 
     private ActivityCartBinding binding;
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -39,7 +41,39 @@ public class Cart extends AppCompatActivity implements CartAdapter.CartItemListe
 
         // Setup buttons
         setupButtons();
+        CartManager.getInstance().setCartUpdateListener(this);
+        binding.bottomNavInclude.btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Cart.this, FarmListActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+        binding.bottomNavInclude.btnHistory.setOnClickListener(v -> {
+            Intent intent = new Intent(this, HistoryActivity.class);
+            startActivity(intent);
+        });
+        ImageButton btnProfile = binding.bottomNavInclude.btnProfile;
+        btnProfile.setOnClickListener(v -> showProfileMenu());
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        CartManager.getInstance().setCartUpdateListener(null);
+    }
+    @Override
+    public void onCartUpdated(int newCount) {
+        if (binding.bottomNavInclude.bottomCartBadge != null) {
+            if (newCount > 0) {
+                binding.bottomNavInclude.bottomCartBadge.setVisibility(View.VISIBLE);
+                binding.bottomNavInclude.bottomCartBadge.setText(String.valueOf(newCount));
+            } else {
+                binding.bottomNavInclude.bottomCartBadge.setVisibility(View.GONE);
+            }
+        }
+    }
+
 
     private void setupUI() {
         // Set up RecyclerView
@@ -114,6 +148,8 @@ public class Cart extends AppCompatActivity implements CartAdapter.CartItemListe
     public void onQuantityChanged() {
         updateTotalPrice();
         cartAdapter.notifyDataSetChanged();
+        // Update badge when quantity changes
+        onCartUpdated(CartManager.getInstance().getTotalItemCount());
     }
 
     @Override
@@ -139,5 +175,34 @@ public class Cart extends AppCompatActivity implements CartAdapter.CartItemListe
         bundle.putString(FirebaseAnalytics.Param.CURRENCY, "USD");
         bundle.putInt(FirebaseAnalytics.Param.QUANTITY, CartManager.getInstance().getItemCount());
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.BEGIN_CHECKOUT, bundle);
+    }
+    private void showProfileMenu() {
+        PopupMenu popup = new PopupMenu(this, binding.bottomNavInclude.btnProfile);
+        popup.getMenuInflater().inflate(R.menu.profile_menu, popup.getMenu());
+
+        popup.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.menu_logout) {
+                logout();
+                return true;
+            }
+            return false;
+        });
+
+        popup.show();
+    }
+
+    private void logout() {
+        // Clear all saved data
+        getSharedPreferences("AppSettings", MODE_PRIVATE).edit().clear().apply();
+
+        // Clear cart and history
+        CartManager.getInstance().clearCart();
+        HistoryManager.getInstance().clearHistory();
+
+        // Navigate to login screen
+        Intent intent = new Intent(this, SignInActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }

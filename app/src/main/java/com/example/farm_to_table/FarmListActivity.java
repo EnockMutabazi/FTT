@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -19,7 +20,7 @@ import com.example.farm_to_table.databinding.ActivityFarmListBinding;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FarmListActivity extends AppCompatActivity {
+public class FarmListActivity extends AppCompatActivity implements CartManager.CartUpdateListener{
 
     private ActivityFarmListBinding binding;
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -69,6 +70,16 @@ public class FarmListActivity extends AppCompatActivity {
                 return true;
             }
         });
+        binding.bottomNavInclude.btnCart.setOnClickListener(v -> {
+            Intent intent = new Intent(FarmListActivity.this, Cart.class);
+            startActivity(intent);
+        });
+        binding.bottomNavInclude.btnHistory.setOnClickListener(v -> {
+            Intent intent = new Intent(this, HistoryActivity.class);
+            startActivity(intent);
+        });
+        ImageButton btnProfile = binding.bottomNavInclude.btnProfile;
+        btnProfile.setOnClickListener(v -> showProfileMenu());
 
         // Initialize Firebase Analytics
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -86,12 +97,22 @@ public class FarmListActivity extends AppCompatActivity {
         populateFarmList();
         // Update cart badge
         updateCartBadge();
+        CartManager.getInstance().setCartUpdateListener(this);
     }
-    private void updateCartBadge() {
-        // Get the current cart count
-        int cartCount = CartManager.getInstance().getItemCount();
+    @Override
+    public void onCartUpdated(int newCount) {
+        if (binding.bottomNavInclude.bottomCartBadge != null) {
+            if (newCount > 0) {
+                binding.bottomNavInclude.bottomCartBadge.setVisibility(View.VISIBLE);
+                binding.bottomNavInclude.bottomCartBadge.setText(String.valueOf(newCount));
+            } else {
+                binding.bottomNavInclude.bottomCartBadge.setVisibility(View.GONE);
+            }
+        }
+    }
 
-        // If you have a cart badge view in the layout, update it here
+    private void updateCartBadge() {
+        int cartCount = CartManager.getInstance().getTotalItemCount();
         if (binding.bottomNavInclude.bottomCartBadge != null) {
             if (cartCount > 0) {
                 binding.bottomNavInclude.bottomCartBadge.setVisibility(View.VISIBLE);
@@ -100,16 +121,8 @@ public class FarmListActivity extends AppCompatActivity {
                 binding.bottomNavInclude.bottomCartBadge.setVisibility(View.GONE);
             }
         }
-        TextView bottomCartBadge = binding.getRoot().findViewById(R.id.bottom_cart_badge);
-        if (bottomCartBadge != null) {
-            if (cartCount > 0) {
-                bottomCartBadge.setVisibility(View.VISIBLE);
-                bottomCartBadge.setText(String.valueOf(cartCount));
-            } else {
-                bottomCartBadge.setVisibility(View.GONE);
-            }
-        }
     }
+
 
     private void setupFarmData() {
         // Same farm data as in MapViewActivity
@@ -174,5 +187,34 @@ public class FarmListActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putString("farm_name", farmName);
         mFirebaseAnalytics.logEvent("farm_list_selection", bundle);
+    }
+    private void showProfileMenu() {
+        PopupMenu popup = new PopupMenu(this, binding.bottomNavInclude.btnProfile);
+        popup.getMenuInflater().inflate(R.menu.profile_menu, popup.getMenu());
+
+        popup.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.menu_logout) {
+                logout();
+                return true;
+            }
+            return false;
+        });
+
+        popup.show();
+    }
+
+    private void logout() {
+        // Clear all saved data
+        getSharedPreferences("AppSettings", MODE_PRIVATE).edit().clear().apply();
+
+        // Clear cart and history
+        CartManager.getInstance().clearCart();
+        HistoryManager.getInstance().clearHistory();
+
+        // Navigate to login screen
+        Intent intent = new Intent(this, SignInActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }

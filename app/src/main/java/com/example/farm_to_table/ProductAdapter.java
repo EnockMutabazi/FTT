@@ -106,7 +106,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
             // Initialize views using findViewById
-            productImage = itemView.findViewById(R.id.iv_product_image);
+            productImage = itemView.findViewById(R.id.iv_product);
             productName = itemView.findViewById(R.id.tv_product_name);
             productPrice = itemView.findViewById(R.id.tv_product_price);
             productDescription = itemView.findViewById(R.id.tv_product_description);
