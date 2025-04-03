@@ -5,6 +5,7 @@
     import android.view.View;
     import android.widget.Button;
     import android.widget.ImageButton;
+    import android.widget.PopupMenu;
 
     import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,7 +25,7 @@
     import java.util.List;
     import java.util.Map;
 
-    public class MapViewActivity extends AppCompatActivity implements OnMapReadyCallback {
+    public class MapViewActivity extends AppCompatActivity implements OnMapReadyCallback, CartManager.CartUpdateListener {
         private GoogleMap map;
         private FirebaseAnalytics mFirebaseAnalytics;
         private Button selectFarmButton;
@@ -73,8 +74,47 @@
                 }
             });
 
+            ImageButton btnProfile = binding.bottomNavInclude.btnProfile;
+            btnProfile.setOnClickListener(v -> showProfileMenu());
             // Set up bottom navigation
             setupBottomNavigation();
+            CartManager.getInstance().setCartUpdateListener(this);
+        }
+        @Override
+        protected void onResume() {
+            super.onResume();
+            // Update cart badge when returning to this activity
+            updateCartBadge();
+        }
+        @Override
+        protected void onDestroy() {
+            super.onDestroy();
+            CartManager.getInstance().setCartUpdateListener(null);
+        }
+        @Override
+        public void onCartUpdated(int newCount) {
+            if (binding.bottomNavInclude.bottomCartBadge != null) {
+                if (newCount > 0) {
+                    binding.bottomNavInclude.bottomCartBadge.setVisibility(View.VISIBLE);
+                    binding.bottomNavInclude.bottomCartBadge.setText(String.valueOf(newCount));
+                } else {
+                    binding.bottomNavInclude.bottomCartBadge.setVisibility(View.GONE);
+                }
+            }
+        }
+
+
+        private void updateCartBadge() {
+            // Get the current cart count
+            int cartCount = CartManager.getInstance().getTotalItemCount();
+            if (binding.bottomNavInclude.bottomCartBadge != null) {
+                if (cartCount > 0) {
+                    binding.bottomNavInclude.bottomCartBadge.setVisibility(View.VISIBLE);
+                    binding.bottomNavInclude.bottomCartBadge.setText(String.valueOf(cartCount));
+                } else {
+                    binding.bottomNavInclude.bottomCartBadge.setVisibility(View.GONE);
+                }
+            }
         }
 
         private void setupFarmData() {
@@ -96,13 +136,13 @@
             ImageButton trackingBtn = binding.bottomNavInclude.btnTracking;
             ImageButton cartBtn = binding.bottomNavInclude.btnCart;
             ImageButton historyBtn = binding.bottomNavInclude.btnHistory;
-            ImageButton settingsBtn = binding.bottomNavInclude.btnSettings;
+            ImageButton settingsBtn = binding.bottomNavInclude.btnProfile;
 
             // Implement these once you have the activities created
             homeBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(MapViewActivity.this, MainActivity.class));
+                    startActivity(new Intent(MapViewActivity.this, FarmListActivity.class));
                 }
             });
             cartBtn.setOnClickListener(new View.OnClickListener() {
@@ -116,38 +156,18 @@
                     mFirebaseAnalytics.logEvent("navigation_click", bundle);
                 }
             });
-
-
-            // Uncomment these once you have the activities implemented
-            /*
-            trackingBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(MapViewActivity.this, TrackingActivity.class));
-                }
-            });
-
-            cartBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(MapViewActivity.this, CartActivity.class));
-                }
-            });
-
             historyBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     startActivity(new Intent(MapViewActivity.this, HistoryActivity.class));
+
+                    // Track event
+                    Bundle bundle = new Bundle();
+                    bundle.putString("button_name", "history_bottom_nav");
+                    mFirebaseAnalytics.logEvent("navigation_click", bundle);
                 }
             });
 
-            settingsBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(MapViewActivity.this, SettingsActivity.class));
-                }
-            });
-            */
         }
 
         @Override
@@ -243,5 +263,34 @@
             public int getImageResourceId() {
                 return images;
             }
+        }
+        private void showProfileMenu() {
+            PopupMenu popup = new PopupMenu(this, binding.bottomNavInclude.btnProfile);
+            popup.getMenuInflater().inflate(R.menu.profile_menu, popup.getMenu());
+
+            popup.setOnMenuItemClickListener(item -> {
+                if (item.getItemId() == R.id.menu_logout) {
+                    logout();
+                    return true;
+                }
+                return false;
+            });
+
+            popup.show();
+        }
+
+        private void logout() {
+            // Clear all saved data
+            getSharedPreferences("AppSettings", MODE_PRIVATE).edit().clear().apply();
+
+            // Clear cart and history
+            CartManager.getInstance().clearCart();
+            HistoryManager.getInstance().clearHistory();
+
+            // Navigate to login screen
+            Intent intent = new Intent(this, SignInActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
         }
     }

@@ -71,12 +71,12 @@
         android:src="@drawable/ic_history" />
 
     <ImageButton
-        android:id="@+id/btnSettings"
+        android:id="@+id/btnProfile"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="?android:attr/selectableItemBackground"
         android:contentDescription="Settings"
         android:padding="8dp"
-        android:src="@drawable/ic_settings" />
+        android:src="@drawable/ic_person" />
 </LinearLayout>

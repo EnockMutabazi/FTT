@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,7 +20,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.example.farm_to_table.databinding.ActivityFarmDetailBinding;
 
-public class FarmDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class FarmDetailActivity extends AppCompatActivity implements OnMapReadyCallback, CartManager.CartUpdateListener {
 
     private ActivityFarmDetailBinding binding;
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -71,7 +72,9 @@ public class FarmDetailActivity extends AppCompatActivity implements OnMapReadyC
 
         // Update cart badge
         updateCartBadge();
+        CartManager.getInstance().setCartUpdateListener(this);
     }
+
 
     @Override
     protected void onResume() {
@@ -79,19 +82,33 @@ public class FarmDetailActivity extends AppCompatActivity implements OnMapReadyC
         // Update cart badge when returning to this activity
         updateCartBadge();
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        CartManager.getInstance().setCartUpdateListener(null);
+    }
+    @Override
+    public void onCartUpdated(int newCount) {
+        if (binding.bottomNavInclude.bottomCartBadge != null) {
+            if (newCount > 0) {
+                binding.bottomNavInclude.bottomCartBadge.setVisibility(View.VISIBLE);
+                binding.bottomNavInclude.bottomCartBadge.setText(String.valueOf(newCount));
+            } else {
+                binding.bottomNavInclude.bottomCartBadge.setVisibility(View.GONE);
+            }
+        }
+    }
+
 
     private void updateCartBadge() {
         // Get the current cart count
-        int cartCount = CartManager.getInstance().getItemCount();
-
-        // Update the cart badge in the bottom navigation
-        TextView bottomCartBadge = binding.getRoot().findViewById(R.id.bottom_cart_badge);
-        if (bottomCartBadge != null) {
+        int cartCount = CartManager.getInstance().getTotalItemCount();
+        if (binding.bottomNavInclude.bottomCartBadge != null) {
             if (cartCount > 0) {
-                bottomCartBadge.setVisibility(View.VISIBLE);
-                bottomCartBadge.setText(String.valueOf(cartCount));
+                binding.bottomNavInclude.bottomCartBadge.setVisibility(View.VISIBLE);
+                binding.bottomNavInclude.bottomCartBadge.setText(String.valueOf(cartCount));
             } else {
-                bottomCartBadge.setVisibility(View.GONE);
+                binding.bottomNavInclude.bottomCartBadge.setVisibility(View.GONE);
             }
         }
     }
@@ -177,11 +194,18 @@ public class FarmDetailActivity extends AppCompatActivity implements OnMapReadyC
             @Override
             public void onClick(View v) {
                 // Navigate to main activity
-                Intent intent = new Intent(FarmDetailActivity.this, MainActivity.class);
+                Intent intent = new Intent(FarmDetailActivity.this, FarmListActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });
+        binding.bottomNavInclude.btnHistory.setOnClickListener(v -> {
+            Intent intent = new Intent(this, HistoryActivity.class);
+            startActivity(intent);
+        });
+        ImageButton btnProfile = binding.bottomNavInclude.btnProfile;
+        btnProfile.setOnClickListener(v -> showProfileMenu());
+
     }
 
     @Override
@@ -215,5 +239,33 @@ public class FarmDetailActivity extends AppCompatActivity implements OnMapReadyC
         bundle.putString("farm_name", farmName);
         mFirebaseAnalytics.logEvent("farm_detail_button_click", bundle);
     }
+    private void showProfileMenu() {
+        PopupMenu popup = new PopupMenu(this, binding.bottomNavInclude.btnProfile);
+        popup.getMenuInflater().inflate(R.menu.profile_menu, popup.getMenu());
 
+        popup.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.menu_logout) {
+                logout();
+                return true;
+            }
+            return false;
+        });
+
+        popup.show();
+    }
+
+    private void logout() {
+        // Clear all saved data
+        getSharedPreferences("AppSettings", MODE_PRIVATE).edit().clear().apply();
+
+        // Clear cart and history
+        CartManager.getInstance().clearCart();
+        HistoryManager.getInstance().clearHistory();
+
+        // Navigate to login screen
+        Intent intent = new Intent(this, SignInActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
 }
