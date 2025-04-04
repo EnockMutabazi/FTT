@@ -6,18 +6,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SignInActivity">
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="sign_in"
+        android:text="Sign in"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/etSignInEmail"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.429"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.591" />
 
     <TextView
         android:id="@+id/textView2"
@@ -38,7 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginVertical="20dp"
-        android:hint="email"
+        android:hint="Email"
         android:inputType="textEmailAddress"
         android:padding="10dp"
         app:layout_constraintBottom_toTopOf="@+id/etSignInPassword"
@@ -52,7 +55,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginVertical="20dp"
-        android:hint="password"
+        android:hint="Password"
         android:inputType="textPassword"
         android:maxLength="8"
         android:padding="10dp"
@@ -67,7 +70,7 @@
         android:layout_height="wrap_content"
         android:layout_marginVertical="20dp"
         android:backgroundTint="@color/black"
-        android:text="sign_in"
+        android:text="Sign in"
         app:layout_constraintBottom_toTopOf="@+id/btnCreateAccount2"
         app:layout_constraintEnd_toEndOf="@+id/etSignInPassword"
         app:layout_constraintStart_toStartOf="@+id/etSignInPassword"
@@ -78,7 +81,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginVertical="20dp"
-        android:text="create_account"
+        android:text="Create Account"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/btnSignIn"
         app:layout_constraintStart_toStartOf="@+id/btnSignIn"

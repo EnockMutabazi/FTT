@@ -127,40 +127,20 @@ public class CreateAccountActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success
                             FirebaseUser user = mAuth.getCurrentUser();
-                            sendEmailVerification();
                             Toast.makeText(CreateAccountActivity.this, "Account created successfully",
                                     Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(CreateAccountActivity.this, MapViewActivity.class));
                             finish();
                         } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(CreateAccountActivity.this, "Account creation is failed: " +
-                                    task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            String errorMessage = task.getException() != null ?
+                                    task.getException().getMessage() : "Invalid email or password";
+                            Toast.makeText(CreateAccountActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                            email.setError("Invalid email");
+                            password.setError("Invalid password");
                         }
-
-                        // Hide progress dialog or loading indicator here if shown
                     }
                 });
     }
 
-    private void sendEmailVerification() {
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null) {
-            user.sendEmailVerification()
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(CreateAccountActivity.this,
-                                        "Verification email sent to " + userEmail,
-                                        Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(CreateAccountActivity.this,
-                                        "Failed to send verification email",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-        }
-    }
+
 }
