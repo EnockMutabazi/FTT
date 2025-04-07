@@ -79,4 +79,5 @@
         android:contentDescription="Settings"
         android:padding="8dp"
         android:src="@drawable/ic_person" />
+
 </LinearLayout>

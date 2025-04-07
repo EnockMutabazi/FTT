@@ -78,6 +78,10 @@ public class FarmListActivity extends AppCompatActivity implements CartManager.C
             Intent intent = new Intent(this, HistoryActivity.class);
             startActivity(intent);
         });
+        binding.bottomNavInclude.btnTracking.setOnClickListener(v -> {
+            Intent intent = new Intent(FarmListActivity.this, TrackOrder.class);
+            startActivity(intent);
+        });
         ImageButton btnProfile = binding.bottomNavInclude.btnProfile;
         btnProfile.setOnClickListener(v -> showProfileMenu());
 
@@ -122,7 +126,6 @@ public class FarmListActivity extends AppCompatActivity implements CartManager.C
             }
         }
     }
-
 
     private void setupFarmData() {
         // Same farm data as in MapViewActivity
