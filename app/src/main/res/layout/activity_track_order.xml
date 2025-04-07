@@ -37,6 +37,43 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+    <LinearLayout
+        android:id="@+id/No_order_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        tools:visibility="gone">
+
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:contentDescription="No order"
+            android:src="@android:drawable/ic_dialog_info" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="No Active Order"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:paddingHorizontal="32dp"
+            android:text="Looks like you haven't ordered anything yet"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="16sp" />
+    </LinearLayout>
+
     <Button
         android:id="@+id/OpenChat"
         android:layout_width="375dp"
@@ -137,6 +174,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textAdress" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

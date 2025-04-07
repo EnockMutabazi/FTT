@@ -46,6 +46,11 @@ public class ProductDetail extends AppCompatActivity implements CartManager.Cart
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         });
+        binding.bottomNavInclude.btnTracking.setOnClickListener(v -> {
+            Intent intent = new Intent(ProductDetail.this, TrackOrder.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
         ImageButton btnProfile = binding.bottomNavInclude.btnProfile;
         btnProfile.setOnClickListener(v -> showProfileMenu());
 

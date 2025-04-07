@@ -121,6 +121,7 @@ public class Cart extends AppCompatActivity implements CartAdapter.CartItemListe
 
                     // For now, clear cart and go back to main
                     CartManager.getInstance().clearCart();
+                    ActiveOrder.isOrderActive = true;
                     Intent intent = new Intent(Cart.this, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);

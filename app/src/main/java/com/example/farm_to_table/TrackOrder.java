@@ -39,6 +39,30 @@ public class TrackOrder extends AppCompatActivity implements OnMapReadyCallback 
         binding = ActivityTrackOrderBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        if (ActiveOrder.isOrderActive) {
+            binding.NoOrderLayout.setVisibility(View.GONE);
+            binding.OpenChat.setVisibility(View.VISIBLE);
+            binding.Editadress.setVisibility(View.VISIBLE);
+            binding.CancelOrder.setVisibility(View.VISIBLE);
+            binding.textView.setVisibility(View.VISIBLE);
+            binding.textView4.setVisibility(View.VISIBLE);
+            binding.textView5.setVisibility(View.VISIBLE);
+            binding.textView6.setVisibility(View.VISIBLE);
+            binding.textAdress.setVisibility(View.VISIBLE);
+            binding.trackMapView.setVisibility(View.VISIBLE);
+        } else {
+            binding.NoOrderLayout.setVisibility(View.VISIBLE);
+            binding.OpenChat.setVisibility(View.GONE);
+            binding.Editadress.setVisibility(View.GONE);
+            binding.CancelOrder.setVisibility(View.GONE);
+            binding.textView.setVisibility(View.GONE);
+            binding.textView4.setVisibility(View.GONE);
+            binding.textView5.setVisibility(View.GONE);
+            binding.textView6.setVisibility(View.GONE);
+            binding.textAdress.setVisibility(View.GONE);
+            binding.trackMapView.setVisibility(View.GONE);
+        }
+
         mapView = findViewById(R.id.trackMapView);
         if (mapView != null) {
             mapView.onCreate(savedInstanceState); // Pass the saved instance state
@@ -157,8 +181,12 @@ public class TrackOrder extends AppCompatActivity implements OnMapReadyCallback 
         new AlertDialog.Builder(this)
                 .setTitle("Are you sure you wish to cancel your order?")
                 .setPositiveButton("Yes", (dialog, which) -> {
+                    ActiveOrder.isOrderActive = false;
+                    recreate();
                 }).setNegativeButton("No", (dialog, which) -> dialog.dismiss()).show();
     }
+
+
 
 
 }
