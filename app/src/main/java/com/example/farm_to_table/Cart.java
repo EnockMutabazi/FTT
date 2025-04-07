@@ -118,12 +118,9 @@ public class Cart extends AppCompatActivity implements CartAdapter.CartItemListe
                                     String.format("%.2f", CartManager.getInstance().getTotalPrice()),
                             Toast.LENGTH_LONG).show();
 
-
-                    // For now, clear cart and go back to main
-                    CartManager.getInstance().clearCart();
-                    ActiveOrder.isOrderActive = true;
-                    Intent intent = new Intent(Cart.this, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    // Go the the payment screen
+                    Intent intent = new Intent(Cart.this, PaymentActivity.class);
+                    intent.putExtra("TOTAL_AMOUNT", CartManager.getInstance().getTotalPrice());
                     startActivity(intent);
                 } else {
                     Toast.makeText(Cart.this, "Your cart is empty", Toast.LENGTH_SHORT).show();
