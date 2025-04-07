@@ -37,28 +37,26 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-
     <Button
         android:id="@+id/OpenChat"
         android:layout_width="375dp"
         android:layout_height="56dp"
-        android:layout_marginTop="216dp"
+        android:layout_marginTop="272dp"
         android:layout_weight="1"
         android:backgroundTint="@android:color/holo_blue_dark"
         android:text="Contact Delivery Driver"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.444"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/textAdress" />
 
     <Button
-        android:id="@+id/Editorder"
+        android:id="@+id/Editadress"
         android:layout_width="375dp"
         android:layout_height="56dp"
         android:layout_marginTop="16dp"
         android:backgroundTint="@android:color/holo_orange_dark"
-        android:text="Edit Order"
+        android:text="Edit Address"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -74,14 +72,15 @@
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Editorder" />
+        app:layout_constraintTop_toBottomOf="@+id/Editadress" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Order is on the way!"
+        android:text="Your order is on the way!"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/OpenChat"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
@@ -117,7 +116,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="333 University Way"
+        android:text="3333 University Way"
         app:layout_constraintStart_toEndOf="@+id/textView5"
         app:layout_constraintTop_toTopOf="@+id/textView5" />
 
@@ -129,6 +128,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/trackMapView"
+        android:layout_width="375dp"
+        android:layout_height="245dp"
+        app:layout_constraintBottom_toTopOf="@+id/OpenChat"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textAdress" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

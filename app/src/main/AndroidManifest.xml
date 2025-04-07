@@ -25,9 +25,6 @@
             android:exported="false"
             android:label="@string/title_activity_track_order" />
         <activity
-            android:name=".MainActivity2"
-            android:exported="false" />
-        <activity
             android:name=".PhotoConfirmation"
             android:exported="false" />
         <activity

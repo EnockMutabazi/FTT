@@ -103,7 +103,6 @@
             }
         }
 
-
         private void updateCartBadge() {
             // Get the current cart count
             int cartCount = CartManager.getInstance().getTotalItemCount();

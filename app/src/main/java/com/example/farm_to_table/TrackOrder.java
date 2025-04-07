@@ -1,37 +1,54 @@
 package com.example.farm_to_table;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.SearchView;
-
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
-import com.example.farm_to_table.databinding.ActivityFarmDetailBinding;
-import com.example.farm_to_table.databinding.ActivityPhotoConfirmationBinding;
 import com.example.farm_to_table.databinding.ActivityTrackOrderBinding;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-public class TrackOrder extends AppCompatActivity {
+import android.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+import android.location.Geocoder;
+import android.location.Address;
+
+import java.util.List;
+import java.util.Locale;
+
+public class TrackOrder extends AppCompatActivity implements OnMapReadyCallback {
 
     private ActivityTrackOrderBinding binding;
+    private GoogleMap Map;
+    private MapView mapView;
 
-    private SearchView search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_order);
 
         binding = ActivityTrackOrderBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        mapView = findViewById(R.id.trackMapView);
+        if (mapView != null) {
+            mapView.onCreate(savedInstanceState); // Pass the saved instance state
+            mapView.getMapAsync(this); // Set up the map asynchronously
+        }
+
         setupButtons();
+
+        binding.Editadress.setOnClickListener(v -> showAddressEditDialog());
+        binding.CancelOrder.setOnClickListener(v -> showcancel());
 
         binding.bottomNavInclude.btnHome.setOnClickListener(v -> {
             Intent intent = new Intent(TrackOrder.this, FarmListActivity.class);
@@ -53,20 +70,95 @@ public class TrackOrder extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
-
-
     }
 
     private void setupButtons() {
         // Back button
-        binding.btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish(); // Go back to previous activity
-            }
-        });
-
+        binding.btnBack.setOnClickListener(v -> finish()); // Go back to previous activity
     }
 
-}
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        Map = googleMap;
 
+        // Add a marker at "333 University Way"
+        LatLng universityLocation = new LatLng(49.94025, -119.3946); // Example coordinates for "333 University Way"
+        Map.addMarker(new MarkerOptions().position(universityLocation).title("3333 University Way"));
+        Map.moveCamera(CameraUpdateFactory.newLatLngZoom(universityLocation, 11)); // Zoom into the location
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mapView != null) {
+            mapView.onResume(); // Resume the map when the activity is resumed
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mapView != null) {
+            mapView.onPause(); // Pause the map when the activity is paused
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mapView != null) {
+            mapView.onDestroy(); // Clean up when the activity is destroyed
+        }
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        if (mapView != null) {
+            mapView.onLowMemory(); // Handle low memory situations
+        }
+    }
+
+    private void showAddressEditDialog() {
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.edit_address, null);
+        EditText input = dialogView.findViewById(R.id.editAddressInput);
+
+        new AlertDialog.Builder(this)
+                .setTitle("Edit Delivery Address").setView(dialogView)
+                .setPositiveButton("Submit", (dialog, which) -> {
+                    String newAddress = input.getText().toString().trim();
+                    if (!newAddress.isEmpty()) {
+                        updateMapMarker(newAddress);
+                    }}).setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss()).show();
+    }
+
+    private void updateMapMarker(String addressStr) {
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocationName(addressStr, 1);
+            if (addresses != null && !addresses.isEmpty()) {
+                Address location = addresses.get(0);
+                LatLng newLocation = new LatLng(location.getLatitude(), location.getLongitude());
+
+                Map.clear();
+                Map.addMarker(new MarkerOptions().position(newLocation).title(addressStr));
+                Map.moveCamera(CameraUpdateFactory.newLatLngZoom(newLocation, 11));
+
+                binding.textAdress.setText(addressStr);
+            } else {
+                Toast.makeText(this, "Address not found.", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Failed to update map. Try again.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void showcancel() {
+        new AlertDialog.Builder(this)
+                .setTitle("Are you sure you wish to cancel your order?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                }).setNegativeButton("No", (dialog, which) -> dialog.dismiss()).show();
+    }
+
+
+}
