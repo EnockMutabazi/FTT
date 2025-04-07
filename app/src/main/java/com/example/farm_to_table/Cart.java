@@ -118,7 +118,6 @@ public class Cart extends AppCompatActivity implements CartAdapter.CartItemListe
                                     String.format("%.2f", CartManager.getInstance().getTotalPrice()),
                             Toast.LENGTH_LONG).show();
 
-
                     // Go the the payment screen
                     Intent intent = new Intent(Cart.this, PaymentActivity.class);
                     intent.putExtra("TOTAL_AMOUNT", CartManager.getInstance().getTotalPrice());
