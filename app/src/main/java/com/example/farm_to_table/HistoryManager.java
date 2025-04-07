@@ -8,6 +8,7 @@ public class HistoryManager {
     private List<Product> historyItems;
     private static final int MAX_HISTORY_ITEMS = 50;
     private HistoryUpdateListener listener;
+    private boolean ActiveOrder = false;
 
     public interface HistoryUpdateListener {
         void onHistoryUpdated();
