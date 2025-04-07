@@ -54,6 +54,10 @@ public class Cart extends AppCompatActivity implements CartAdapter.CartItemListe
             Intent intent = new Intent(this, HistoryActivity.class);
             startActivity(intent);
         });
+        binding.bottomNavInclude.btnTracking.setOnClickListener(v -> {
+            Intent intent = new Intent(this, TrackOrder.class);
+            startActivity(intent);
+        });
         ImageButton btnProfile = binding.bottomNavInclude.btnProfile;
         btnProfile.setOnClickListener(v -> showProfileMenu());
     }

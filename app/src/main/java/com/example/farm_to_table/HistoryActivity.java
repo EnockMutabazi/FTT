@@ -45,6 +45,11 @@ public class HistoryActivity extends AppCompatActivity implements ProductAdapter
             startActivity(intent);
             finish();
         });
+        binding.bottomNavInclude.btnTracking.setOnClickListener(v -> {
+            Intent intent = new Intent(HistoryActivity.this, TrackOrder.class);
+            startActivity(intent);
+            finish();
+        });
         ImageButton btnProfile = binding.bottomNavInclude.btnProfile;
         btnProfile.setOnClickListener(v -> showProfileMenu());
     }

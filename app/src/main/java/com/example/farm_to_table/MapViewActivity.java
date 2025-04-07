@@ -167,6 +167,12 @@
                     mFirebaseAnalytics.logEvent("navigation_click", bundle);
                 }
             });
+            trackingBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(MapViewActivity.this, TrackOrder.class));
+                }
+            });
 
         }
 
