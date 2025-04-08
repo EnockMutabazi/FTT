@@ -16,6 +16,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 import android.location.Geocoder;
 import android.location.Address;
@@ -100,6 +102,8 @@ public class TrackOrder extends AppCompatActivity implements OnMapReadyCallback 
             startActivity(intent);
             finish();
         });
+        ImageButton btnProfile = binding.bottomNavInclude.btnProfile;
+        btnProfile.setOnClickListener(v -> showProfileMenu());
     }
 
     private void setupButtons() {
@@ -195,5 +199,33 @@ public class TrackOrder extends AppCompatActivity implements OnMapReadyCallback 
                     recreate();
                 }).setNegativeButton("No", (dialog, which) -> dialog.dismiss()).show();
     }
+    private void showProfileMenu() {
+        PopupMenu popup = new PopupMenu(this, binding.bottomNavInclude.btnProfile);
+        popup.getMenuInflater().inflate(R.menu.profile_menu, popup.getMenu());
+
+        popup.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.menu_logout) {
+                logout();
+                return true;
+            }
+            return false;
+        });
+
+        popup.show();
+    }
+    private void logout() {
+        // Clear all saved data
+        getSharedPreferences("AppSettings", MODE_PRIVATE).edit().clear().apply();
+        // Clear cart and history
+        CartManager.getInstance().clearCart();
+        HistoryManager.getInstance().clearHistory();
+
+        // Navigate to login screen
+        Intent intent = new Intent(this, SignInActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
+
 
 }

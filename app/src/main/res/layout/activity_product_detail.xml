@@ -130,19 +130,25 @@
 
                 <ImageButton
                     android:id="@+id/btn_decrease"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:padding="8dp"
+                    android:scaleX="1.8"
+                    android:scaleY="1.8"
                     android:layout_marginStart="16dp"
-                    android:tint="@android:color/holo_red_dark"
+                    android:tint="@android:color/holo_blue_dark"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="Decrease Quantity"
-                    android:src="@android:drawable/ic_menu_delete" />
+                    android:src="@drawable/ic_minus" />
 
                 <TextView
                     android:id="@+id/tv_quantity"
                     android:layout_width="48dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:padding="8dp"
+                    android:scaleX="1.6"
+                    android:scaleY="1.6"
                     android:text="0"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
@@ -150,12 +156,16 @@
 
                 <ImageButton
                     android:id="@+id/btn_increase"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:padding="8dp"
+                    android:scaleX="1.8"
+                    android:scaleY="1.8"
+
                     android:tint="@android:color/holo_blue_dark"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="Increase Quantity"
-                    android:src="@android:drawable/ic_menu_add" />
+                    android:src="@drawable/ic_plus" />
             </LinearLayout>
 
             <!-- Total Price -->
