@@ -52,6 +52,8 @@ public class PaymentActivity extends AppCompatActivity {
                 Toast.makeText(PaymentActivity.this, "Please select a payment method", Toast.LENGTH_SHORT).show();
                 return;
             }
+            ActiveOrder.getInstance().copyFromCart(CartManager.getInstance().getCartItems());
+            ActiveOrder.isOrderActive = true;
             Toast.makeText(PaymentActivity.this, "Payment Successful!", Toast.LENGTH_LONG).show();
         });
     }
