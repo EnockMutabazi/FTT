@@ -79,67 +79,78 @@
             android:textSize="16sp" />
     </LinearLayout>
 
-    <!-- Cart Items RecyclerView -->
+
 
     <!-- Checkout Layout -->
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_cart_items"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:clipToPadding="false"
-        android:padding="16dp"
-        app:layout_constraintBottom_toTopOf="@id/checkout_layout"
+        android:fillViewport="true"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_editor_absoluteX="-77dp"
-        tools:listitem="@layout/item_cart" />
+        app:layout_constraintBottom_toTopOf="@id/bottomNavInclude">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/checkout_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:elevation="8dp"
-        android:padding="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavInclude">
-
-        <TextView
-            android:id="@+id/tv_total_label"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Total:"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_total_amount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="$0.00"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_total_label"
-            app:layout_constraintStart_toEndOf="@+id/tv_total_label"
-            app:layout_constraintTop_toTopOf="@+id/tv_total_label" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_cart_items"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:padding="16dp"
+                tools:listitem="@layout/item_cart" />
 
-        <Button
-            android:id="@+id/btn_checkout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@android:color/holo_green_dark"
-            android:paddingHorizontal="24dp"
-            android:text="Checkout"
-            android:textColor="@android:color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/checkout_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/tv_total_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total:"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_total_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="$0.00"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/tv_total_label"
+                    app:layout_constraintTop_toTopOf="@+id/tv_total_label" />
+
+                <Button
+                    android:id="@+id/btn_checkout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@android:color/holo_green_dark"
+                    android:paddingHorizontal="24dp"
+                    android:text="Checkout"
+                    android:textColor="@android:color/white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
 
     <include
         android:id="@+id/bottomNavInclude"

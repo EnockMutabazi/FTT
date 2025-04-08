@@ -104,7 +104,11 @@ public class TrackOrder extends AppCompatActivity implements OnMapReadyCallback 
 
     private void setupButtons() {
         // Back button
-        binding.btnBack.setOnClickListener(v -> finish()); // Go back to previous activity
+        binding.btnBack.setOnClickListener(v -> {
+            Intent intent = new Intent(TrackOrder.this, FarmListActivity.class);
+            startActivity(intent);
+            finish();
+        });
     }
 
     @Override

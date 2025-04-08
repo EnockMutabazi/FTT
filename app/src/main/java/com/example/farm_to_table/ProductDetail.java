@@ -230,7 +230,6 @@ public class ProductDetail extends AppCompatActivity implements CartManager.Cart
         bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, this.getClass().getSimpleName());
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
     }
-
     private void trackAddToCart(String productName, int quantity, double total) {
         Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, productName);
@@ -253,11 +252,9 @@ public class ProductDetail extends AppCompatActivity implements CartManager.Cart
 
         popup.show();
     }
-
     private void logout() {
         // Clear all saved data
         getSharedPreferences("AppSettings", MODE_PRIVATE).edit().clear().apply();
-
         // Clear cart and history
         CartManager.getInstance().clearCart();
         HistoryManager.getInstance().clearHistory();
