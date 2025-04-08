@@ -29,7 +29,6 @@ public class TrackOrder extends AppCompatActivity implements OnMapReadyCallback 
     private GoogleMap Map;
     private MapView mapView;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -50,6 +49,7 @@ public class TrackOrder extends AppCompatActivity implements OnMapReadyCallback 
             binding.textView6.setVisibility(View.VISIBLE);
             binding.textAdress.setVisibility(View.VISIBLE);
             binding.trackMapView.setVisibility(View.VISIBLE);
+            binding.btnOrderSumm.setVisibility(View.VISIBLE);
         } else {
             binding.NoOrderLayout.setVisibility(View.VISIBLE);
             binding.OpenChat.setVisibility(View.GONE);
@@ -61,6 +61,7 @@ public class TrackOrder extends AppCompatActivity implements OnMapReadyCallback 
             binding.textView6.setVisibility(View.GONE);
             binding.textAdress.setVisibility(View.GONE);
             binding.trackMapView.setVisibility(View.GONE);
+            binding.btnOrderSumm.setVisibility(View.GONE);
         }
 
         mapView = findViewById(R.id.trackMapView);
@@ -86,6 +87,11 @@ public class TrackOrder extends AppCompatActivity implements OnMapReadyCallback 
         });
         binding.bottomNavInclude.btnCart.setOnClickListener(v -> {
             Intent intent = new Intent(TrackOrder.this, Cart.class);
+            startActivity(intent);
+            finish();
+        });
+        binding.btnOrderSumm.setOnClickListener(v -> {
+            Intent intent = new Intent(TrackOrder.this, OrderSummaryActivity.class);
             startActivity(intent);
             finish();
         });
@@ -185,8 +191,5 @@ public class TrackOrder extends AppCompatActivity implements OnMapReadyCallback 
                     recreate();
                 }).setNegativeButton("No", (dialog, which) -> dialog.dismiss()).show();
     }
-
-
-
 
 }

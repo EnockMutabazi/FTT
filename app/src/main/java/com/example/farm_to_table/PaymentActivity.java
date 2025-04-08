@@ -63,6 +63,7 @@ public class PaymentActivity extends AppCompatActivity {
         btnPay.setText("Pay " + String.format("$%.2f", totalAmount));
     }
 
+
     private boolean validatePayment() {
         if (rgPaymentOptions.getCheckedRadioButtonId() == -1) {
             Toast.makeText(this, "Please select a payment method", Toast.LENGTH_SHORT).show();
@@ -103,6 +104,10 @@ public class PaymentActivity extends AppCompatActivity {
         editor.putBoolean("isOrderActive", true);
         editor.putString("deliveryAddress", "Your delivery address");
         editor.apply();
+      
+        // Copy to order, and activate order tracking screen
+        ActiveOrder.getInstance().copyFromCart(CartManager.getInstance().getCartItems());
+        ActiveOrder.isOrderActive = true;
 
         // Clear cart
         CartManager.getInstance().clearCart();
@@ -121,6 +126,7 @@ public class PaymentActivity extends AppCompatActivity {
                 })
                 .setCancelable(false)
                 .show();
+
     }
 
     @Override
