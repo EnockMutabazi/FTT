@@ -1,5 +1,6 @@
 package com.example.farm_to_table;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,8 +29,19 @@ public class OrderSummaryActivity extends AppCompatActivity {
 
         updateTotalPrice();
 
-        binding.btnBack.setOnClickListener(v -> finish());
+        binding.btnBack.setOnClickListener(v -> {
+            startActivity(new Intent(OrderSummaryActivity.this, TrackOrder.class));
+            finish();
+        });
     }
+
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(OrderSummaryActivity.this, TrackOrder.class));
+        finish();
+    }
+
 
     private void updateTotalPrice() {
         double total = 0;
