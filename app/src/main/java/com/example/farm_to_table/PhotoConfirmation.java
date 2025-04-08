@@ -100,13 +100,12 @@ public class PhotoConfirmation extends AppCompatActivity {
 
     private void setupButtons() {
         // Back button
-        binding.btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish(); // Go back to previous activity
-            }
+        binding.btnBack.setOnClickListener(v -> {
+            startActivity(new Intent(this, TrackOrder.class));
+            finish();
         });
-
     }
+
+    
 
 }
